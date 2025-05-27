@@ -1,10 +1,16 @@
 import pickle
 import numpy as np
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List
 
-app = Flask(__name__)
+app = FastAPI()
 
-# Load the Pickle model
+# Define a Pydantic model for input validation
+class PredictionInput(BaseModel):
+    features: List[float]  # Adjust based on your model's input requirements
+
+# Load the Pickle model (ensure wifi_threat_model.pkl is in the same directory)
 try:
     with open('wifi_threat_model.pkl', 'rb') as file:
         model = pickle.load(file)
@@ -13,19 +19,18 @@ except Exception as e:
     print(f"Error loading pickle file: {e}")
     raise
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.post("/predict")
+async def predict(data: PredictionInput):
     try:
-        # Get JSON data from the WiFi security app
-        data = request.get_json()
-        # Extract features (adjust based on your model's input requirements)
-        features = np.array([data['features']]).reshape(1, -1)
+        # Extract features and reshape for the model
+        features = np.array([data.features]).reshape(1, -1)
         # Make prediction
         prediction = model.predict(features)[0]
         # Return prediction as JSON
-        return jsonify({'prediction': int(prediction)})
+        return {"prediction": int(prediction)}
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        raise HTTPException(status_code=400, detail=str(e))
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)

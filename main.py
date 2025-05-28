@@ -6,7 +6,7 @@ import cloudpickle
 app = FastAPI()
 
 # Load model with cloudpickle
-with open("rf_wifi_threat_model.pkl", "rb") as f:
+with open("wifi_threat_model12.pkl", "rb") as f:
     model = cloudpickle.load(f)
 
 # Define expected input features

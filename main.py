@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 
 app = FastAPI()
-model = pickle.load(open("rf_wifi_threat_model1copy.pkl", "rb"))
+model = pickle.load(open("rf_wifi_threat_model.pkl", "rb"))
 
 class Features(BaseModel):
     features: list

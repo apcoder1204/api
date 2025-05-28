@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: wifi-threat-api
+    env: python
+    buildCommand: pip install -r new_api/requirements.txt
+    startCommand: uvicorn new_api.main:app --host 0.0.0.0 --port 8000
+    plan: free
+    runtime: python

@@ -1,10 +1,9 @@
-# new_api/main.py
+# main.py
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pickle
 import numpy as np
 import os
-
 # Load the model
 model_path = os.path.join(os.path.dirname(__file__), "wifi_threat_model.pkl")
 with open(model_path, "rb") as f:
@@ -32,4 +31,4 @@ def predict(data: WiFiFeatures):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("new_api.main:app", host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)

@@ -1,5 +1,4 @@
 # new_api/main.py
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pickle
@@ -30,3 +29,7 @@ def predict(data: WiFiFeatures):
         return {"threat_detected": bool(prediction[0])}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("new_api.main:app", host="0.0.0.0", port=8000)
